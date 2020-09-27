@@ -1,0 +1,3 @@
+module chess {
+    exports chess;
+}
