@@ -4,22 +4,7 @@ import chess.game.move.Move;
 
 import java.util.List;
 
-public interface GameManager {
-
-    /*
-     * Methods that need to be mapped to right game and/or player
-     */
-    void handleStartGameRequest(int playerId, String username, boolean singlePlayer);
-
-    void handlePlayerReadyRequest(int playerId);
-
-    void handleMakeMoveRequest(int playerId, int originColumn, int originRow, int targetColumn, int targetRow);
-
-    void handleUndoLastMoveRequest(int playerId);
-
-    void handlePauseGameRequest(int playerId);
-
-    void handleResignRequest(int playerId);
+public interface GameListener {
 
     /*
      * Methods for sending data to certain player or players
@@ -41,6 +26,4 @@ public interface GameManager {
     void processShowMessageToPlayers(List<Player> players, String message);
 
     void processShowMessageToPlayer(Player player, String message);
-
-    void processClientDisconnect(String sessionId);
 }

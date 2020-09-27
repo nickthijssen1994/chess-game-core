@@ -5,12 +5,12 @@ import chess.PlayerColor;
 public class ComputerPlayer extends BasePlayer {
 
     @Override
-    public String getSessionId() {
-        return null;
+    public int getPlayerId() {
+        return 0;
     }
 
     @Override
-    public void setSessionId(String sessionId) {
+    public void setPlayerId(int playerId) {
 
     }
 

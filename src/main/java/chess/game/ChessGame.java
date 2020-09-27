@@ -13,21 +13,29 @@ import java.util.List;
 
 public class ChessGame implements Game {
 
+    private int id;
     private GameManager gameManager;
 
     private Board board;
     private List<Player> players = new ArrayList<>();
     private List<Move> doneMoves = new ArrayList<>();
 
+    private boolean singlePlayer = false;
     private boolean hasStarted = false;
     private boolean hasEnded = false;
     private Date startTime;
     private Date endTime;
 
-    public ChessGame(GameManager gameManager) {
+    public ChessGame(GameManager gameManager, boolean singlePlayer) {
         this.gameManager = gameManager;
+        this.singlePlayer = singlePlayer;
         board = new Board();
         board.setPiecesToStartPosition();
+    }
+
+    @Override
+    public int getID() {
+        return id;
     }
 
     @Override
@@ -67,7 +75,7 @@ public class ChessGame implements Game {
             gameManager.processShowMessageToPlayer(player, "Waiting For Other Player To Join");
         } else {
             for (Player addedPlayer : players) {
-                if (addedPlayer.getSessionId().equals(player.getSessionId())) {
+                if (addedPlayer.getPlayerId() == player.getPlayerId()) {
                     addedPlayer.setReady(true);
                     gameManager.processShowMessageToPlayer(getOtherPlayer(addedPlayer),
                             player.getUsername() + " Is " + "Ready To Start");
@@ -184,7 +192,7 @@ public class ChessGame implements Game {
     @Override
     public Player getOtherPlayer(Player player) {
         for (Player addedPlayer : players) {
-            if (!addedPlayer.getSessionId().equals(player.getSessionId())) {
+            if (addedPlayer.getPlayerId() != player.getPlayerId()) {
                 return addedPlayer;
             }
         }

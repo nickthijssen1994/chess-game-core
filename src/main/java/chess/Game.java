@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface Game {
 
+    int getID();
+
     void addPlayer(Player player);
 
     void setPlayerReady(Player player);

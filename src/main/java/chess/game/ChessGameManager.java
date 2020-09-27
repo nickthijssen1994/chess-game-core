@@ -5,43 +5,47 @@ import chess.GameManager;
 import chess.PieceLocation;
 import chess.Player;
 import chess.game.move.Move;
+import chess.game.player.HumanPlayer;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ChessGameManager implements GameManager {
 
+    private Map<Integer, Game> playerIdGames = new HashMap<>();
+
     @Override
-    public void handleStartGameRequest(String sessionId, String username) {
+    public void handleStartGameRequest(int playerId, String username, boolean singlePlayer) {
+        if (!playerIdGames.containsKey(playerId)) {
+            Game game = new ChessGame(this, singlePlayer);
+            game.addPlayer(new HumanPlayer(playerId, username));
+            playerIdGames.put(playerId, new ChessGame(this, singlePlayer));
+        }
+    }
+
+    @Override
+    public void handlePlayerReadyRequest(int playerId) {
 
     }
 
     @Override
-    public void handlePlayerReadyRequest(String sessionId) {
+    public void handleMakeMoveRequest(int playerId, int originColumn, int originRow, int targetColumn, int targetRow) {
 
     }
 
     @Override
-    public void handlePieceLocationsRequest(String sessionId) {
+    public void handleUndoLastMoveRequest(int playerId) {
 
     }
 
     @Override
-    public void handleMakeMoveRequest(String sessionId, int originColumn, int originRow, int targetColumn, int targetRow) {
+    public void handlePauseGameRequest(int playerId) {
 
     }
 
     @Override
-    public void handleUndoLastMoveRequest(String sessionId) {
-
-    }
-
-    @Override
-    public void handlePauseGameRequest(String sessionId) {
-
-    }
-
-    @Override
-    public void handleResignRequest(String sessionId) {
+    public void handleResignRequest(int playerId) {
 
     }
 

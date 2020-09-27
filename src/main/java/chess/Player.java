@@ -2,9 +2,9 @@ package chess;
 
 public interface Player {
 
-    String getSessionId();
+    int getPlayerId();
 
-    void setSessionId(String sessionId);
+    void setPlayerId(int playerId);
 
     String getUsername();
 

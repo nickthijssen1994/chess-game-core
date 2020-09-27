@@ -4,7 +4,7 @@ import chess.PlayerColor;
 
 public class HumanPlayer extends BasePlayer {
 
-    private String sessionId;
+    private int playerId;
     private String username;
     private PlayerColor playerColor;
     private boolean hasTurn;
@@ -12,19 +12,19 @@ public class HumanPlayer extends BasePlayer {
     private boolean hasLost;
     private boolean hasResigned;
 
-    public HumanPlayer(String sessionId, String username) {
-        this.sessionId = sessionId;
+    public HumanPlayer(int playerId, String username) {
+        this.playerId = playerId;
         this.username = username;
     }
 
     @Override
-    public String getSessionId() {
-        return sessionId;
+    public int getPlayerId() {
+        return playerId;
     }
 
     @Override
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
     }
 
     @Override
