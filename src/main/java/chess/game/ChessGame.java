@@ -5,6 +5,7 @@ import chess.game.board.Board;
 import chess.game.board.Square;
 import chess.game.move.Move;
 import chess.game.pieces.Piece;
+import chess.game.player.ComputerPlayer;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,6 +48,9 @@ public class ChessGame implements Game {
             player.setPlayerColor(PlayerColor.WHITE);
             player.setHasTurn(true);
             players.add(player);
+            if(singlePlayer){
+                players.add(new ComputerPlayer());
+            }
             gameManager.processPlayerAdded(player);
             gameManager.processPlayerTurn(players, getPlayerWhoHasTurn());
             gameManager.processPieceLocations(player, board.getPieceLocations());
