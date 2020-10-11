@@ -18,22 +18,40 @@ public class King extends Piece {
         List<Square> validMoves = new ArrayList<>();
 
         // Horizontal Right
-        super.addMoveIfValid(board, validMoves, getColumnPosition() + 1, getRowPosition());
+        addMoveIfValid(board, validMoves, getColumnPosition() + 1, getRowPosition());
         // Horizontal Left
-        super.addMoveIfValid(board, validMoves, getColumnPosition() - 1, getRowPosition());
+        addMoveIfValid(board, validMoves, getColumnPosition() - 1, getRowPosition());
         // Vertical Up
-        super.addMoveIfValid(board, validMoves, getColumnPosition(), getRowPosition() + 1);
+        addMoveIfValid(board, validMoves, getColumnPosition(), getRowPosition() + 1);
         // Vertical Down
-        super.addMoveIfValid(board, validMoves, getColumnPosition(), getRowPosition() - 1);
+        addMoveIfValid(board, validMoves, getColumnPosition(), getRowPosition() - 1);
         // Diagonal Left And Down
-        super.addMoveIfValid(board, validMoves, getColumnPosition() - 1, getRowPosition() - 1);
+        addMoveIfValid(board, validMoves, getColumnPosition() - 1, getRowPosition() - 1);
         // Diagonal Left And Up
-        super.addMoveIfValid(board, validMoves, getColumnPosition() - 1, getRowPosition() + 1);
+        addMoveIfValid(board, validMoves, getColumnPosition() - 1, getRowPosition() + 1);
         // Diagonal Right And Down
-        super.addMoveIfValid(board, validMoves, getColumnPosition() + 1, getRowPosition() - 1);
+        addMoveIfValid(board, validMoves, getColumnPosition() + 1, getRowPosition() - 1);
         // Diagonal Right And Up
-        super.addMoveIfValid(board, validMoves, getColumnPosition() + 1, getRowPosition() + 1);
+        addMoveIfValid(board, validMoves, getColumnPosition() + 1, getRowPosition() + 1);
 
         return validMoves;
+    }
+
+
+    private boolean addMoveIfValid(Board board, List<Square> validMoves, int targetColumn, int targetRow) {
+        if (targetColumn >= 0 && targetRow >= 0 && targetColumn <= 7 && targetRow <= 7) {
+            Square targetSquare = board.getSquare(targetColumn, targetRow);
+            if (targetSquare.isEmpty()) {
+                validMoves.add(targetSquare);
+                return true;
+            } else if (targetSquare.hasOpponentPiece(super.getPlayerColor())) {
+                validMoves.add(targetSquare);
+                return false;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }

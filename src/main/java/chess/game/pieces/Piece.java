@@ -86,21 +86,4 @@ public abstract class Piece {
 
         return possibleOpponentMoves.contains(board.getSquare(columnPosition, rowPosition));
     }
-
-    protected boolean addMoveIfValid(Board board, List<Square> validMoves, int targetColumn, int targetRow) {
-        if (targetColumn >= 0 && targetRow >= 0 && targetColumn <= 7 && targetRow <= 7) {
-            Square targetSquare = board.getSquare(targetColumn, targetRow);
-            if (targetSquare.isEmpty()) {
-                validMoves.add(targetSquare);
-                return true;
-            } else if (targetSquare.hasOpponentPiece(playerColor)) {
-                validMoves.add(targetSquare);
-                return false;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
 }

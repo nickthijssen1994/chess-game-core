@@ -17,22 +17,39 @@ public class Knight extends Piece {
     public List<Square> getValidMoves(Board board) {
         List<Square> validMoves = new ArrayList<>();
 
-        super.addMoveIfValid(board, validMoves, getColumnPosition() + 2, getRowPosition() + 1);
+        addMoveIfValid(board, validMoves, getColumnPosition() + 2, getRowPosition() + 1);
 
-        super.addMoveIfValid(board, validMoves, getColumnPosition() + 2, getRowPosition() - 1);
+        addMoveIfValid(board, validMoves, getColumnPosition() + 2, getRowPosition() - 1);
 
-        super.addMoveIfValid(board, validMoves, getColumnPosition() + 1, getRowPosition() - 2);
+        addMoveIfValid(board, validMoves, getColumnPosition() + 1, getRowPosition() - 2);
 
-        super.addMoveIfValid(board, validMoves, getColumnPosition() - 1, getRowPosition() - 2);
+        addMoveIfValid(board, validMoves, getColumnPosition() - 1, getRowPosition() - 2);
 
-        super.addMoveIfValid(board, validMoves, getColumnPosition() - 2, getRowPosition() - 1);
+        addMoveIfValid(board, validMoves, getColumnPosition() - 2, getRowPosition() - 1);
 
-        super.addMoveIfValid(board, validMoves, getColumnPosition() - 2, getRowPosition() + 1);
+        addMoveIfValid(board, validMoves, getColumnPosition() - 2, getRowPosition() + 1);
 
-        super.addMoveIfValid(board, validMoves, getColumnPosition() + 1, getRowPosition() + 2);
+        addMoveIfValid(board, validMoves, getColumnPosition() + 1, getRowPosition() + 2);
 
-        super.addMoveIfValid(board, validMoves, getColumnPosition() - 1, getRowPosition() + 2);
+        addMoveIfValid(board, validMoves, getColumnPosition() - 1, getRowPosition() + 2);
 
         return validMoves;
+    }
+
+    private boolean addMoveIfValid(Board board, List<Square> validMoves, int targetColumn, int targetRow) {
+        if (targetColumn >= 0 && targetRow >= 0 && targetColumn <= 7 && targetRow <= 7) {
+            Square targetSquare = board.getSquare(targetColumn, targetRow);
+            if (targetSquare.isEmpty()) {
+                validMoves.add(targetSquare);
+                return true;
+            } else if (targetSquare.hasOpponentPiece(super.getPlayerColor())) {
+                validMoves.add(targetSquare);
+                return false;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }

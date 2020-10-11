@@ -89,11 +89,13 @@ public class ChessGame implements Game {
             } else {
                 Move playerMove = HumanMoveStrategy.makeHumanMove(board, color, originColumn, originRow, targetColumn, targetRow);
                 doneMoves.add(playerMove);
+                BoardPrinter.printPieces(board);
                 switchTurns();
                 // Let Computer make move when in single player
                 if (singlePlayer) {
                     Move computerMove = ComputerMoveStrategy.makeComputerMove(board, playerWhoHasTurn);
                     doneMoves.add(computerMove);
+                    BoardPrinter.printPieces(board);
                     switchTurns();
                 }
             }

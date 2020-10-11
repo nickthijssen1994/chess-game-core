@@ -19,25 +19,45 @@ public class Pawn extends Piece {
         List<Square> validMoves = new ArrayList<>();
 
         // For White Pawns
-        if (this.getPlayerColor() == PlayerColor.WHITE) {
-            super.addMoveIfValid(board, validMoves, getColumnPosition(), getRowPosition() + 1);
-            if (!this.getHasMoved()) {
-                super.addMoveIfValid(board, validMoves, getColumnPosition(), getRowPosition() + 2);
+        if (super.getPlayerColor() == PlayerColor.WHITE) {
+            addMoveIfValid(board, validMoves, getColumnPosition(), getRowPosition() + 1, true);
+            if (!super.getHasMoved()) {
+                addMoveIfValid(board, validMoves, getColumnPosition(), getRowPosition() + 2, true);
             }
-            super.addMoveIfValid(board, validMoves, getColumnPosition() + 1, getRowPosition() + 1);
-            super.addMoveIfValid(board, validMoves, getColumnPosition() - 1, getRowPosition() + 1);
+            addMoveIfValid(board, validMoves, getColumnPosition() + 1, getRowPosition() + 1, false);
+            addMoveIfValid(board, validMoves, getColumnPosition() - 1, getRowPosition() + 1, false);
         }
 
         // For Black Pawns
-        if (this.getPlayerColor() == PlayerColor.BLACK) {
-            super.addMoveIfValid(board, validMoves, getColumnPosition(), getRowPosition() - 1);
-            if (!this.getHasMoved()) {
-                super.addMoveIfValid(board, validMoves, getColumnPosition(), getRowPosition() - 2);
+        if (super.getPlayerColor() == PlayerColor.BLACK) {
+            addMoveIfValid(board, validMoves, getColumnPosition(), getRowPosition() - 1, true);
+            if (!super.getHasMoved()) {
+                addMoveIfValid(board, validMoves, getColumnPosition(), getRowPosition() - 2, true);
             }
-            super.addMoveIfValid(board, validMoves, getColumnPosition() + 1, getRowPosition() - 1);
-            super.addMoveIfValid(board, validMoves, getColumnPosition() - 1, getRowPosition() - 1);
+            addMoveIfValid(board, validMoves, getColumnPosition() + 1, getRowPosition() - 1, false);
+            addMoveIfValid(board, validMoves, getColumnPosition() - 1, getRowPosition() - 1, false);
         }
 
         return validMoves;
+    }
+
+    private boolean addMoveIfValid(Board board, List<Square> validMoves, int targetColumn, int targetRow, boolean forward) {
+        if (targetColumn >= 0 && targetRow >= 0 && targetColumn <= 7 && targetRow <= 7) {
+            Square targetSquare = board.getSquare(targetColumn, targetRow);
+            if (forward && targetSquare.isEmpty()) {
+                validMoves.add(targetSquare);
+                return true;
+            } else if (!forward && !targetSquare.isEmpty()) {
+                if (targetSquare.hasOpponentPiece(super.getPlayerColor())) {
+                    validMoves.add(targetSquare);
+                    return true;
+                }
+                return false;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }

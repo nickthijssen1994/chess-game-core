@@ -39,7 +39,7 @@ public class ComputerMoveStrategy {
         }
 
         while (!foundValidTarget) {
-            if (board.getSquare(originColumn, originRow).getPiece().getValidMoves(board).contains(board.getSquare(targetColumn, targetRow))) {
+            if (!board.getSquare(originColumn, originRow).getPiece().getValidMoves(board).contains(board.getSquare(targetColumn, targetRow))) {
                 foundValidTarget = false;
                 targetColumn = random.nextInt(8);
                 targetRow = random.nextInt(8);

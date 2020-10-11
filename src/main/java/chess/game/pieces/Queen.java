@@ -20,35 +20,35 @@ public class Queen extends Piece {
 
         // Horizontal To Right
         for (int column = getColumnPosition() + 1; column < 8; column++) {
-            if (!super.addMoveIfValid(board, validMoves, column, getRowPosition())) {
+            if (!addMoveIfValid(board, validMoves, column, getRowPosition())) {
                 break;
             }
         }
 
         // Horizontal To Left
         for (int column = getColumnPosition() - 1; column > 0; column--) {
-            if (!super.addMoveIfValid(board, validMoves, column, getRowPosition())) {
+            if (!addMoveIfValid(board, validMoves, column, getRowPosition())) {
                 break;
             }
         }
 
         // Vertical To Top
         for (int row = getRowPosition() + 1; row < 8; row++) {
-            if (!super.addMoveIfValid(board, validMoves, getColumnPosition(), row)) {
+            if (!addMoveIfValid(board, validMoves, getColumnPosition(), row)) {
                 break;
             }
         }
 
         // Vertical To Bottom
         for (int row = getRowPosition() - 1; row > 0; row--) {
-            if (!super.addMoveIfValid(board, validMoves, getColumnPosition(), row)) {
+            if (!addMoveIfValid(board, validMoves, getColumnPosition(), row)) {
                 break;
             }
         }
 
         // Diagonal To Top Right
         for (int diagonal = 1; diagonal < 7; diagonal++) {
-            if (!super.addMoveIfValid(board, validMoves, getColumnPosition() + diagonal,
+            if (!addMoveIfValid(board, validMoves, getColumnPosition() + diagonal,
                     getRowPosition() + diagonal)) {
                 break;
             }
@@ -56,7 +56,7 @@ public class Queen extends Piece {
 
         // Diagonal To Top Left
         for (int diagonal = 1; diagonal < 7; diagonal++) {
-            if (!super.addMoveIfValid(board, validMoves, getColumnPosition() - diagonal,
+            if (!addMoveIfValid(board, validMoves, getColumnPosition() - diagonal,
                     getRowPosition() + diagonal)) {
                 break;
             }
@@ -64,7 +64,7 @@ public class Queen extends Piece {
 
         // Diagonal To Bottom Right
         for (int diagonal = 1; diagonal < 7; diagonal++) {
-            if (!super.addMoveIfValid(board, validMoves, getColumnPosition() + diagonal,
+            if (!addMoveIfValid(board, validMoves, getColumnPosition() + diagonal,
                     getRowPosition() - diagonal)) {
                 break;
             }
@@ -72,12 +72,29 @@ public class Queen extends Piece {
 
         // Diagonal To Bottom Left
         for (int diagonal = 1; diagonal < 7; diagonal++) {
-            if (!super.addMoveIfValid(board, validMoves, getColumnPosition() - diagonal,
+            if (!addMoveIfValid(board, validMoves, getColumnPosition() - diagonal,
                     getRowPosition() - diagonal)) {
                 break;
             }
         }
 
         return validMoves;
+    }
+
+    private boolean addMoveIfValid(Board board, List<Square> validMoves, int targetColumn, int targetRow) {
+        if (targetColumn >= 0 && targetRow >= 0 && targetColumn <= 7 && targetRow <= 7) {
+            Square targetSquare = board.getSquare(targetColumn, targetRow);
+            if (targetSquare.isEmpty()) {
+                validMoves.add(targetSquare);
+                return true;
+            } else if (targetSquare.hasOpponentPiece(super.getPlayerColor())) {
+                validMoves.add(targetSquare);
+                return false;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }
