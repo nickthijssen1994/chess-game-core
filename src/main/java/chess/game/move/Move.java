@@ -9,7 +9,6 @@ import java.util.Date;
 
 public class Move {
 
-    private int id;
     private PlayerColor playerColor;
     private Square originSquare;
     private Square targetSquare;
@@ -17,8 +16,7 @@ public class Move {
     private Piece capturedPiece;
     private Date timeStamp;
 
-    public Move(int id, PlayerColor playerColor, Square originSquare, Square targetSquare) {
-        this.id = id;
+    public Move(PlayerColor playerColor, Square originSquare, Square targetSquare) {
         this.playerColor = playerColor;
         this.originSquare = originSquare;
         this.targetSquare = targetSquare;
@@ -26,9 +24,6 @@ public class Move {
         timeStamp = new Date();
     }
 
-    public int getId() {
-        return id;
-    }
 
     public Piece getCapturedPiece() {
         return capturedPiece;
@@ -52,10 +47,6 @@ public class Move {
 
     public Date getTimeStamp() {
         return timeStamp;
-    }
-
-    public String getIdString() {
-        return String.valueOf(id);
     }
 
     public String getTimeString() {

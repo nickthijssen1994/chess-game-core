@@ -1,9 +1,7 @@
 package chess.game;
 
 import chess.game.board.Board;
-import chess.game.board.Square;
 import chess.game.move.Move;
-import chess.game.pieces.Piece;
 import chess.game.player.*;
 import chess.utilities.BoardPrinter;
 
@@ -76,32 +74,31 @@ public class ChessGame implements Game {
     @Override
     public void makeMove(PlayerColor color, int originColumn, int originRow, int targetColumn, int targetRow) {
 
+        // Check if game is started and player has turn
         if (hasStarted && playerWhoHasTurn == color) {
-            Square selectedOriginSquare = board.getSquare(originColumn, originRow);
-            Square selectedTargetSquare = board.getSquare(targetColumn, targetRow);
 
             // Check if there is a piece on the selected square
-            if (selectedOriginSquare.isEmpty()) {
-
+            if (board.getSquare(originColumn, originRow).isEmpty()) {
+                //TODO Show Message To Player
+            }
+            // Check if piece belongs to player
+            else if (board.getSquare(originColumn, originRow).hasOpponentPiece(color)) {
+                //TODO Show Message To Player
+            } else if (!board.getSquare(originColumn, originRow).getPiece().getValidMoves(board).contains(board.getSquare(targetColumn,targetRow))) {
+                //TODO Show Message To Player
             } else {
-                Piece piece = selectedOriginSquare.getPiece();
-
-                // Check if the selected piece belongs to player
-                if (piece.getPlayerColor() != color) {
-
-                } else if (!piece.getValidMoves(board).contains(selectedTargetSquare)) {
-
-                } else {
-                    Move doneMove = new Move(doneMoves.size() + 1,
-                            color,
-                            selectedOriginSquare,
-                            selectedTargetSquare);
-                    doneMove.execute();
-
-                    doneMoves.add(doneMove);
+                Move playerMove = HumanMoveStrategy.makeHumanMove(board, color, originColumn, originRow, targetColumn, targetRow);
+                doneMoves.add(playerMove);
+                switchTurns();
+                // Let Computer make move when in single player
+                if (singlePlayer) {
+                    Move computerMove = ComputerMoveStrategy.makeComputerMove(board, playerWhoHasTurn);
+                    doneMoves.add(computerMove);
                     switchTurns();
                 }
             }
+        } else {
+            //TODO Show Message To Player
         }
     }
 

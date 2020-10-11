@@ -41,5 +41,4 @@ public abstract class BasePlayer implements Player {
     public void resign() {
         hasResigned = true;
     }
-
 }
