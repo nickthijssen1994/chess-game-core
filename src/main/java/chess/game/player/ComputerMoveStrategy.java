@@ -11,7 +11,7 @@ public class ComputerMoveStrategy {
         throw new IllegalStateException("Utility Class");
     }
 
-    // TODO Implement Computer AI Logic
+    // TODO Improve Computer AI Logic
     public static Move makeComputerMove(Board board, PlayerColor color) {
         Random random = new Random();
         int originColumn = random.nextInt(8);
