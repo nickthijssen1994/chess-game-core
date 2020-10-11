@@ -1,8 +1,7 @@
 package chess.game.board;
 
-import chess.PieceLocation;
-import chess.game.player.PlayerColor;
 import chess.game.pieces.*;
+import chess.game.player.PlayerColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,22 +109,5 @@ public class Board {
             }
         }
         return playerPieces;
-    }
-
-    public List<PieceLocation> getPieceLocations() {
-        List<PieceLocation> pieceLocations = new ArrayList<>();
-        for (int column = 0; column < 8; column++) {
-            for (int row = 0; row < 8; row++) {
-                Square square = squares[column][row];
-                if (!square.isEmpty()) {
-                    PieceLocation pieceLocation = new PieceLocation(column,
-                            row,
-                            square.getPiece().getPieceType(),
-                            square.getPiece().getPlayerColor());
-                    pieceLocations.add(pieceLocation);
-                }
-            }
-        }
-        return pieceLocations;
     }
 }

@@ -1,37 +1,20 @@
 package chess;
 
-import chess.game.move.Move;
-import chess.game.player.Player;
-
-import java.util.List;
+import chess.game.player.PlayerColor;
 
 public interface Game {
 
-    void addPlayer(Player player);
+    void addPlayer(PlayerColor color, String username);
 
-    void setPlayerReady(Player player);
+    void setPlayerReady(PlayerColor color);
 
-    void makeMove(Player player, int originColumn, int originRow, int targetColumn, int targetRow);
+    void makeMove(PlayerColor color, int originColumn, int originRow, int targetColumn, int targetRow);
 
-    void undoLastMove(Player player);
+    void undoLastMove(PlayerColor color);
 
-    void pauseGame(Player player);
+    void pauseGame(PlayerColor color);
 
-    void restartGame(Player player);
+    void restartGame(PlayerColor color);
 
-    void resign(Player player);
-
-    int getNumberOfPlayers();
-
-    boolean getHasStarted();
-
-    boolean getHasEnded();
-
-    Player getOtherPlayer(Player player);
-
-    List<Player> getPlayers();
-
-    List<Move> getDoneMoves();
-
-    List<PieceLocation> getPieceLocations();
+    void resign(PlayerColor color);
 }

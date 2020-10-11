@@ -7,9 +7,6 @@
     <groupId>nl.nickthijssen</groupId>
     <artifactId>chess</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <modules>
-        <module>chess-solid</module>
-    </modules>
     <packaging>pom</packaging>
     <name>Chess Game Core</name>
 

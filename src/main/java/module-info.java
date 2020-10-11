@@ -1,3 +1,3 @@
-module chess {
+open module chess {
     exports chess;
 }

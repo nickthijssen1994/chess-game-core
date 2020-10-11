@@ -1,20 +1,19 @@
 package chess.game;
 
-import chess.*;
+import chess.Game;
 import chess.game.board.Board;
 import chess.game.board.Square;
 import chess.game.move.Move;
 import chess.game.pieces.Piece;
-import chess.game.pieces.PieceType;
 import chess.game.player.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ChessGame implements Game {
 
     private final Board board;
-    private final List<Player> players = new ArrayList<>();
+    private final Map<PlayerColor, Player> players = new HashMap<>();
+    private PlayerColor playerWhoHasTurn = PlayerColor.WHITE;
     private final List<Move> doneMoves = new ArrayList<>();
 
     private boolean singlePlayer = false;
@@ -28,66 +27,55 @@ public class ChessGame implements Game {
     }
 
     @Override
-    public void addPlayer(Player player) {
-        if (players.isEmpty()) {
-            if (player.getUsername().isBlank()) {
-                player.setUsername("Player One");
+    public void addPlayer(PlayerColor color, String username) {
+
+        if (players.size() == 0) {
+            Player player;
+            if (username.isBlank()) {
+                player = new HumanPlayer(color, "Player One");
+            } else {
+                player = new HumanPlayer(color, username);
             }
-            player.setPlayerColor(PlayerColor.WHITE);
-            player.setHasTurn(true);
-            players.add(player);
-            if(singlePlayer){
-                players.add(new ComputerPlayer());
+            players.put(color, player);
+            if (singlePlayer) {
+                Player computerPlayer = new ComputerPlayer(getOtherPlayerColor(color), "Computer");
+                computerPlayer.setReady(true);
+                players.put(computerPlayer.getColor(), computerPlayer);
             }
-        } else if (players.size() == 1) {
-            if (player.getUsername().isBlank()) {
-                player.setUsername("Player Two");
+        } else if (players.size() == 1 && !players.containsKey(color)) {
+            Player player;
+            if (username.isBlank()) {
+                player = new HumanPlayer(color, "Player Two");
+            } else {
+                player = new HumanPlayer(color, username);
             }
-            player.setPlayerColor(PlayerColor.BLACK);
-            player.setHasTurn(false);
-            players.add(player);
+            players.put(color, player);
+        } else {
+            // Show max number of players message
         }
     }
 
     @Override
-    public void setPlayerReady(Player player) {
-        if (hasStarted) {
-        } else if (players.size() != 2) {
+    public void setPlayerReady(PlayerColor color) {
+        players.get(color).setReady(true);
 
-        } else {
-            for (Player addedPlayer : players) {
-                if (addedPlayer.getPlayerId() == player.getPlayerId()) {
-                    addedPlayer.setReady(true);
-                }
+        boolean allPlayersReady = true;
+        for (Player player : players.values()) {
+            if (!player.isReady()) {
+                allPlayersReady = false;
+                break;
             }
+        }
 
-            boolean playersReady = true;
-            for (Player addedPlayer : players) {
-                if (!addedPlayer.isReady()) {
-                    playersReady = false;
-                    break;
-                }
-            }
-
-            if (playersReady) {
-                startGame();
-            }
+        if (allPlayersReady) {
+            startGame();
         }
     }
 
     @Override
-    public void makeMove(Player player, int originColumn, int originRow, int targetColumn, int targetRow) {
+    public void makeMove(PlayerColor color, int originColumn, int originRow, int targetColumn, int targetRow) {
 
-        if (!hasStarted) {
-
-        }
-
-        //TODO replace returning true or false by useful message notification to client
-        // Check if player has turn
-        else if (!player.hasTurn()) {
-
-        } else {
-
+        if (hasStarted && playerWhoHasTurn == color) {
             Square selectedOriginSquare = board.getSquare(originColumn, originRow);
             Square selectedTargetSquare = board.getSquare(targetColumn, targetRow);
 
@@ -98,15 +86,13 @@ public class ChessGame implements Game {
                 Piece piece = selectedOriginSquare.getPiece();
 
                 // Check if the selected piece belongs to player
-                if (piece.getPlayerColor() != player.getPlayerColor()) {
+                if (piece.getPlayerColor() != color) {
 
                 } else if (!piece.getValidMoves(board).contains(selectedTargetSquare)) {
 
                 } else {
-                    //TODO Search for check or checkmate
-                    //TODO Also check for special moves like castling, en passant or pawn promotion
                     Move doneMove = new Move(doneMoves.size() + 1,
-                            player.getPlayerColor(),
+                            color,
                             selectedOriginSquare,
                             selectedTargetSquare);
                     doneMove.execute();
@@ -119,78 +105,38 @@ public class ChessGame implements Game {
     }
 
     @Override
-    public void undoLastMove(Player player) {
-        if (!hasStarted) {
-
-        } else if (!doneMoves.isEmpty()) {
+    public void undoLastMove(PlayerColor color) {
+        if (hasStarted && !doneMoves.isEmpty() && playerWhoHasTurn != color) {
             Move undoneMove = doneMoves.get(doneMoves.size() - 1);
-            if (undoneMove.getPlayerColor() == player.getPlayerColor() && !player.hasTurn()) {
-                undoneMove.undo();
-
-                doneMoves.remove(undoneMove);
-                switchTurns();
-            } else {
-
-            }
-        } else {
-
+            undoneMove.undo();
+            doneMoves.remove(undoneMove);
+            switchTurns();
         }
     }
 
     @Override
-    public void pauseGame(Player player) {
+    public void pauseGame(PlayerColor color) {
 
     }
 
     @Override
-    public void restartGame(Player player) {
+    public void restartGame(PlayerColor color) {
         doneMoves.clear();
         board.setPiecesToStartPosition();
     }
 
     @Override
-    public void resign(Player player) {
-
+    public void resign(PlayerColor color) {
+        players.get(color).resign();
+        hasEnded = true;
     }
 
-    @Override
-    public int getNumberOfPlayers() {
-        return players.size();
-    }
-
-    @Override
-    public boolean getHasStarted() {
-        return hasStarted;
-    }
-
-    @Override
-    public boolean getHasEnded() {
-        return hasEnded;
-    }
-
-    @Override
-    public Player getOtherPlayer(Player player) {
-        for (Player addedPlayer : players) {
-            if (addedPlayer.getPlayerId() != player.getPlayerId()) {
-                return addedPlayer;
-            }
+    public PlayerColor getOtherPlayerColor(PlayerColor color) {
+        if (color == PlayerColor.WHITE) {
+            return PlayerColor.BLACK;
+        } else {
+            return PlayerColor.WHITE;
         }
-        return null;
-    }
-
-    @Override
-    public List<Player> getPlayers() {
-        return players;
-    }
-
-    @Override
-    public List<Move> getDoneMoves() {
-        return doneMoves;
-    }
-
-    @Override
-    public List<PieceLocation> getPieceLocations() {
-        return board.getPieceLocations();
     }
 
     private void startGame() {
@@ -198,26 +144,14 @@ public class ChessGame implements Game {
     }
 
     private Player getPlayerWhoHasTurn() {
-        for (Player player : players) {
-            if (player.hasTurn()) {
-                return player;
-            }
-        }
-        return null;
-    }
-
-    private boolean isKingInCheck(PlayerColor playerColor) {
-        for (Piece piece : board.getPlayerPieces(playerColor)) {
-            if (piece.getPieceType() == PieceType.KING && piece.canBeCaptured(board)) {
-                return true;
-            }
-        }
-        return false;
+        return players.get(playerWhoHasTurn);
     }
 
     private void switchTurns() {
-        for (Player player : players) {
-            player.setHasTurn(!player.hasTurn());
+        if (playerWhoHasTurn == PlayerColor.WHITE) {
+            playerWhoHasTurn = PlayerColor.BLACK;
+        } else {
+            playerWhoHasTurn = PlayerColor.WHITE;
         }
     }
 }
