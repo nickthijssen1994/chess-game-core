@@ -1,6 +1,7 @@
 package chess;
 
 import chess.game.ChessGame;
+import chess.game.Game;
 
 public class ChessMain {
 

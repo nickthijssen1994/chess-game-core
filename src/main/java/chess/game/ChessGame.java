@@ -1,11 +1,11 @@
 package chess.game;
 
-import chess.Game;
 import chess.game.board.Board;
 import chess.game.board.Square;
 import chess.game.move.Move;
 import chess.game.pieces.Piece;
 import chess.game.player.*;
+import chess.utilities.BoardPrinter;
 
 import java.util.*;
 
@@ -24,6 +24,7 @@ public class ChessGame implements Game {
         this.singlePlayer = singlePlayer;
         board = new Board();
         board.setPiecesToStartPosition();
+        BoardPrinter.printPieces(board);
     }
 
     @Override
