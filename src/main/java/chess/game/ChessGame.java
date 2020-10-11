@@ -5,38 +5,26 @@ import chess.game.board.Board;
 import chess.game.board.Square;
 import chess.game.move.Move;
 import chess.game.pieces.Piece;
-import chess.game.player.ComputerPlayer;
+import chess.game.pieces.PieceType;
+import chess.game.player.*;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ChessGame implements Game {
 
-    private int id;
-    private GameManager gameManager;
-
-    private Board board;
-    private List<Player> players = new ArrayList<>();
-    private List<Move> doneMoves = new ArrayList<>();
+    private final Board board;
+    private final List<Player> players = new ArrayList<>();
+    private final List<Move> doneMoves = new ArrayList<>();
 
     private boolean singlePlayer = false;
     private boolean hasStarted = false;
     private boolean hasEnded = false;
-    private Date startTime;
-    private Date endTime;
 
-    public ChessGame(GameManager gameManager, boolean singlePlayer) {
-        this.gameManager = gameManager;
+    public ChessGame(boolean singlePlayer) {
         this.singlePlayer = singlePlayer;
         board = new Board();
         board.setPiecesToStartPosition();
-    }
-
-    @Override
-    public int getID() {
-        return id;
     }
 
     @Override
@@ -51,10 +39,6 @@ public class ChessGame implements Game {
             if(singlePlayer){
                 players.add(new ComputerPlayer());
             }
-            gameManager.processPlayerAdded(player);
-            gameManager.processPlayerTurn(players, getPlayerWhoHasTurn());
-            gameManager.processPieceLocations(player, board.getPieceLocations());
-            gameManager.processShowMessageToPlayer(player, "Waiting For Other Player To Join");
         } else if (players.size() == 1) {
             if (player.getUsername().isBlank()) {
                 player.setUsername("Player Two");
@@ -62,27 +46,18 @@ public class ChessGame implements Game {
             player.setPlayerColor(PlayerColor.BLACK);
             player.setHasTurn(false);
             players.add(player);
-            gameManager.processPlayerAdded(player);
-            gameManager.processOpponentAdded(player, getOtherPlayer(player));
-            gameManager.processOpponentAdded(getOtherPlayer(player), player);
-            gameManager.processPlayerTurn(players, getPlayerWhoHasTurn());
-            gameManager.processPieceLocations(player, board.getPieceLocations());
-            gameManager.processShowMessageToPlayers(players, "Waiting For Players To Be Ready");
         }
     }
 
     @Override
     public void setPlayerReady(Player player) {
         if (hasStarted) {
-            gameManager.processShowMessageToPlayer(player, "Game Has Already Started");
         } else if (players.size() != 2) {
-            gameManager.processShowMessageToPlayer(player, "Waiting For Other Player To Join");
+
         } else {
             for (Player addedPlayer : players) {
                 if (addedPlayer.getPlayerId() == player.getPlayerId()) {
                     addedPlayer.setReady(true);
-                    gameManager.processShowMessageToPlayer(getOtherPlayer(addedPlayer),
-                            player.getUsername() + " Is " + "Ready To Start");
                 }
             }
 
@@ -104,13 +79,13 @@ public class ChessGame implements Game {
     public void makeMove(Player player, int originColumn, int originRow, int targetColumn, int targetRow) {
 
         if (!hasStarted) {
-            gameManager.processShowMessageToPlayer(player, "Game Hasn't Started Yet");
+
         }
 
         //TODO replace returning true or false by useful message notification to client
         // Check if player has turn
         else if (!player.hasTurn()) {
-            gameManager.processShowMessageToPlayer(player, "Not Your Turn");
+
         } else {
 
             Square selectedOriginSquare = board.getSquare(originColumn, originRow);
@@ -118,15 +93,15 @@ public class ChessGame implements Game {
 
             // Check if there is a piece on the selected square
             if (selectedOriginSquare.isEmpty()) {
-                gameManager.processShowMessageToPlayer(player, "No Piece Selected");
+
             } else {
                 Piece piece = selectedOriginSquare.getPiece();
 
                 // Check if the selected piece belongs to player
                 if (piece.getPlayerColor() != player.getPlayerColor()) {
-                    gameManager.processShowMessageToPlayer(player, "Not Your Piece");
+
                 } else if (!piece.getValidMoves(board).contains(selectedTargetSquare)) {
-                    gameManager.processShowMessageToPlayer(player, "Invalid Move");
+
                 } else {
                     //TODO Search for check or checkmate
                     //TODO Also check for special moves like castling, en passant or pawn promotion
@@ -135,7 +110,7 @@ public class ChessGame implements Game {
                             selectedOriginSquare,
                             selectedTargetSquare);
                     doneMove.execute();
-                    gameManager.processMoveDone(players, doneMove);
+
                     doneMoves.add(doneMove);
                     switchTurns();
                 }
@@ -146,19 +121,19 @@ public class ChessGame implements Game {
     @Override
     public void undoLastMove(Player player) {
         if (!hasStarted) {
-            gameManager.processShowMessageToPlayer(player, "Game Hasn't Started Yet");
+
         } else if (!doneMoves.isEmpty()) {
             Move undoneMove = doneMoves.get(doneMoves.size() - 1);
             if (undoneMove.getPlayerColor() == player.getPlayerColor() && !player.hasTurn()) {
                 undoneMove.undo();
-                gameManager.processMoveUndone(players, undoneMove);
+
                 doneMoves.remove(undoneMove);
                 switchTurns();
             } else {
-                gameManager.processShowMessageToPlayer(player, "Move can not be undone");
+
             }
         } else {
-            gameManager.processShowMessageToPlayer(player, "No moves done yet");
+
         }
     }
 
@@ -220,11 +195,6 @@ public class ChessGame implements Game {
 
     private void startGame() {
         hasStarted = true;
-        startTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-        String date = formatter.format(startTime);
-        gameManager.processShowMessageToPlayers(players, "Game Started At " + date);
-        gameManager.processStartGame(this);
     }
 
     private Player getPlayerWhoHasTurn() {
@@ -249,6 +219,5 @@ public class ChessGame implements Game {
         for (Player player : players) {
             player.setHasTurn(!player.hasTurn());
         }
-        gameManager.processPlayerTurn(players, getPlayerWhoHasTurn());
     }
 }

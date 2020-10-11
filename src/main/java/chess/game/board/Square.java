@@ -1,12 +1,12 @@
 package chess.game.board;
 
-import chess.PlayerColor;
+import chess.game.player.PlayerColor;
 import chess.game.pieces.Piece;
 
 public class Square {
 
-    private int column;
-    private int row;
+    private final int column;
+    private final int row;
     private Piece piece;
 
     public Square(int column, int row) {

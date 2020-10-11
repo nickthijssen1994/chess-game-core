@@ -1,7 +1,5 @@
 package chess.game.player;
 
-import chess.PlayerColor;
-
 public class ComputerPlayer extends BasePlayer {
 
     @Override

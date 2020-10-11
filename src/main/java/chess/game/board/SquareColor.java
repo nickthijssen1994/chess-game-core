@@ -1,4 +1,4 @@
-package chess;
+package chess.game.board;
 
 public enum SquareColor {
     WHITE("W", "White"),

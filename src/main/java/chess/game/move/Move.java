@@ -1,9 +1,8 @@
 package chess.game.move;
 
-import chess.PlayerColor;
+import chess.game.player.PlayerColor;
 import chess.game.board.Square;
 import chess.game.pieces.Piece;
-import chess.game.utilities.ChessNotationHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -80,14 +79,6 @@ public class Move {
         return "";
     }
 
-    public String getOriginString() {
-        return ChessNotationHelper.squareToAlgebraicNotation(originSquare);
-    }
-
-    public String getTargetString() {
-        return ChessNotationHelper.squareToAlgebraicNotation(targetSquare);
-    }
-
     /*
      * Executes this move
      * If there is a opponent piece on the target square, it is set to be captured
@@ -115,26 +106,5 @@ public class Move {
         } else {
             targetSquare.setPiece(null);
         }
-    }
-
-    public String executedMessage() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(playerColor.getName());
-        stringBuilder.append(" moved " + movedPiece.getPieceType().getName());
-        stringBuilder.append(" from " + ChessNotationHelper.squareToAlgebraicNotation(originSquare));
-        stringBuilder.append(" to " + ChessNotationHelper.squareToAlgebraicNotation(targetSquare));
-        if (capturedPiece != null) {
-            stringBuilder.append(" and captured " + capturedPiece.getPieceType().getName());
-        }
-        return stringBuilder.toString();
-    }
-
-    public String undoneMessage() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(playerColor.getName());
-        stringBuilder.append(" undid " + movedPiece.getPieceType().getName());
-        stringBuilder.append(" from " + ChessNotationHelper.squareToAlgebraicNotation(originSquare));
-        stringBuilder.append(" to " + ChessNotationHelper.squareToAlgebraicNotation(targetSquare));
-        return stringBuilder.toString();
     }
 }

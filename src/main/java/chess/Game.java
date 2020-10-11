@@ -1,12 +1,11 @@
 package chess;
 
 import chess.game.move.Move;
+import chess.game.player.Player;
 
 import java.util.List;
 
 public interface Game {
-
-    int getID();
 
     void addPlayer(Player player);
 

@@ -1,5 +1,8 @@
 package chess;
 
+import chess.game.pieces.PieceType;
+import chess.game.player.PlayerColor;
+
 public class PieceLocation {
 
     private int column;

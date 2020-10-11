@@ -1,7 +1,7 @@
 package chess.game.board;
 
 import chess.PieceLocation;
-import chess.PlayerColor;
+import chess.game.player.PlayerColor;
 import chess.game.pieces.*;
 
 import java.util.ArrayList;
@@ -9,15 +9,9 @@ import java.util.List;
 
 public class Board {
 
-	/*
-	columns (X) are letters from a to h
-	rows (y) are numbers from 1 to 8
-	For display the array is turned 90 degrees counterclockwise.
-	 */
+    private final Square[][] squares = new Square[8][8]; // [columns][rows]
 
-    private Square[][] squares = new Square[8][8]; // [columns][rows]
-
-    private List<Piece> pieces = new ArrayList<>();
+    private final List<Piece> pieces = new ArrayList<>();
 
     public Board() {
         for (int column = 0; column < 8; column++) {

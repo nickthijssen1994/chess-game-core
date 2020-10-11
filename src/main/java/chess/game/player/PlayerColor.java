@@ -1,15 +1,13 @@
-package chess;
+package chess.game.player;
 
-public enum PromotionType {
-    BISHOP("B", "Bishop"),
-    KNIGHT("N", "Knight"),
-    QUEEN("Q", "Queen"),
-    ROOK("R", "Rook");
+public enum PlayerColor {
+    WHITE("w", "White"),
+    BLACK("b", "Black");
 
     private String abbreviation;
     private String name;
 
-    PromotionType(String abbreviation, String name) {
+    PlayerColor(String abbreviation, String name) {
         this.abbreviation = abbreviation;
         this.name = name;
     }
