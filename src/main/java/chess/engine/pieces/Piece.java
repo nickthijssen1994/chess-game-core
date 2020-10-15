@@ -16,7 +16,7 @@ public abstract class Piece {
 		this.playerColor = playerColor;
 	}
 
-	public PlayerColor getPlayerColor(){
+	public PlayerColor getPlayerColor() {
 		return this.playerColor;
 	}
 

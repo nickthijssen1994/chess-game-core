@@ -1,6 +1,5 @@
 package chess.engine;
 
 public enum PlayerColor {
-	WHITE,
-	BLACK
+	WHITE, BLACK
 }
