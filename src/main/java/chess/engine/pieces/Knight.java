@@ -32,7 +32,7 @@ public class Knight extends Piece {
 	}
 
 	@Override
-	public List<Move> calculateLegalMoves(Board board) {
+	public List<Move> calculateLegalMoves(final Board board) {
 
 		int candidateDestinationCoordinate;
 		final List<Move> legalMoves = new ArrayList<>();
@@ -48,13 +48,14 @@ public class Knight extends Piece {
 
 				final Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinate);
 				if (!candidateDestinationTile.isTileOccupied()) {
-					legalMoves.add(new Move());
+					legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));
 				} else {
 					final Piece pieceAtDestination = candidateDestinationTile.getPiece();
 					final PlayerColor pieceColor = pieceAtDestination.getPlayerColor();
 
 					if (this.playerColor != pieceColor) {
-						legalMoves.add(new Move());
+						legalMoves.add(new Move.AttackMove(board, this, candidateDestinationCoordinate,
+								pieceAtDestination));
 					}
 				}
 			}
