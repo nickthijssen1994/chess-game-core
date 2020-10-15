@@ -8,14 +8,16 @@ import java.util.List;
 
 public abstract class Piece {
 
-	protected final int columnPosition;
-	protected final int rowPosition;
+	protected final int piecePosition;
 	protected final PlayerColor playerColor;
 
-	Piece(final int columnPosition, final int rowPosition, final PlayerColor playerColor) {
-		this.columnPosition = columnPosition;
-		this.rowPosition = rowPosition;
+	Piece(final int piecePosition, final PlayerColor playerColor) {
+		this.piecePosition = piecePosition;
 		this.playerColor = playerColor;
+	}
+
+	public PlayerColor getPlayerColor(){
+		return this.playerColor;
 	}
 
 	public abstract List<Move> calculateLegalMoves(final Board board);

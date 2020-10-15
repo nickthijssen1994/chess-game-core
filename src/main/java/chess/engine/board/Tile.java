@@ -6,31 +6,26 @@ import java.util.*;
 
 public abstract class Tile {
 
-	protected final int column;
-	protected final int row;
-
 	private static final Map<Integer, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
+	protected final int coordinate;
+
+	private Tile(int coordinate) {
+		this.coordinate = coordinate;
+	}
 
 	private static Map<Integer, EmptyTile> createAllPossibleEmptyTiles() {
 
 		final Map<Integer, EmptyTile> emptyTileMap = new HashMap<>();
 
-		for (int row = 0; row < 8; row++) {
-			for (int column = 0; column < 8; column++) {
-				emptyTileMap.put(column * 10 + row, new EmptyTile(column, row));
-			}
+		for (int nextCoordinate = 0; nextCoordinate < 64; nextCoordinate++) {
+			emptyTileMap.put(nextCoordinate, new EmptyTile(nextCoordinate));
 		}
 
 		return Collections.unmodifiableMap(emptyTileMap);
 	}
 
-	public static Tile createTile(final int column, final int row, final Piece piece) {
-		return piece != null ? new OccupiedTile(column, row, piece) : EMPTY_TILES_CACHE.get(column * 10 + row);
-	}
-
-	private Tile(int column, int row) {
-		this.column = column;
-		this.row = row;
+	public static Tile createTile(final int coordinate, final Piece piece) {
+		return piece != null ? new OccupiedTile(coordinate, piece) : EMPTY_TILES_CACHE.get(coordinate);
 	}
 
 	public abstract boolean isTileOccupied();
@@ -39,8 +34,8 @@ public abstract class Tile {
 
 	public static final class EmptyTile extends Tile {
 
-		private EmptyTile(final int column, final int row) {
-			super(column, row);
+		private EmptyTile(final int coordinate) {
+			super(coordinate);
 		}
 
 		@Override
@@ -58,8 +53,8 @@ public abstract class Tile {
 
 		private final Piece piece;
 
-		private OccupiedTile(int column, int row, Piece piece) {
-			super(column, row);
+		private OccupiedTile(int coordinate, Piece piece) {
+			super(coordinate);
 			this.piece = piece;
 		}
 
