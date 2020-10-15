@@ -5,6 +5,8 @@ import chess.engine.board.*;
 
 import java.util.*;
 
+import static chess.engine.board.BoardUtils.isValidTileCoordinate;
+
 public class Knight extends Piece {
 
 	private static final int[] CANDIDATE_MOVE_COORDINATES = {-17, -15, -10, -6, 6, 10, 15, 17};
@@ -22,7 +24,7 @@ public class Knight extends Piece {
 		for (final int currentCandidate : CANDIDATE_MOVE_COORDINATES) {
 			candidateDestinationCoordinate = this.piecePosition + currentCandidate;
 
-			if (true) {
+			if (isValidTileCoordinate(candidateDestinationCoordinate)) {
 				final Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinate);
 				if (!candidateDestinationTile.isTileOccupied()) {
 					legalMoves.add(new Move());
