@@ -1,17 +1,15 @@
 package chess.engine.board;
 
 import chess.engine.pieces.Piece;
-import com.google.common.collect.ImmutableMap;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public abstract class Tile {
 
 	protected final int column;
 	protected final int row;
 
-	private static final Map<Integer, EmptyTile> EMPTY_TILES = createAllPossibleEmptyTiles();
+	private static final Map<Integer, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
 
 	private static Map<Integer, EmptyTile> createAllPossibleEmptyTiles() {
 
@@ -23,11 +21,11 @@ public abstract class Tile {
 			}
 		}
 
-		return ImmutableMap.copyOf(emptyTileMap);
+		return Collections.unmodifiableMap(emptyTileMap);
 	}
 
 	public static Tile createTile(final int column, final int row, final Piece piece) {
-		return piece != null ? new OccupiedTile(column, row, piece) : EMPTY_TILES.get(column * 10 + row);
+		return piece != null ? new OccupiedTile(column, row, piece) : EMPTY_TILES_CACHE.get(column * 10 + row);
 	}
 
 	private Tile(int column, int row) {
@@ -41,7 +39,7 @@ public abstract class Tile {
 
 	public static final class EmptyTile extends Tile {
 
-		EmptyTile(final int column, final int row) {
+		private EmptyTile(final int column, final int row) {
 			super(column, row);
 		}
 
@@ -60,7 +58,7 @@ public abstract class Tile {
 
 		private final Piece piece;
 
-		OccupiedTile(int column, int row, Piece piece) {
+		private OccupiedTile(int column, int row, Piece piece) {
 			super(column, row);
 			this.piece = piece;
 		}
